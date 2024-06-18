@@ -5,8 +5,8 @@ import ButtonList from './ButtonList'
 const MainContainer = () => {
   return (
     <div>
-        <Videolist/>
         <ButtonList/>
+        <Videolist/>
     </div>
   )
 }
