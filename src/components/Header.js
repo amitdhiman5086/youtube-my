@@ -1,12 +1,45 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
+import { YT_SEARCH_API } from "../utils/constants";
+import { cacheResults } from "../utils/searchSlice";
 
 const Header = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestios, setSugggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchCache = useSelector((store) => store.search);
+  // console.log(searchQuery);
   const dispatch = useDispatch();
   const togggleHandler = () => {
     dispatch(toggleMenu());
   };
+
+  const getSuggestonData = async () => {
+    const data = await fetch(YT_SEARCH_API + searchQuery);
+    const json = await data.json();
+    setSugggestions(json[1]);
+    console.log("Api Call");
+    dispatch(
+      cacheResults({
+        [searchQuery]: json[1],
+      })
+    );
+  };
+  useEffect(() => {
+    // console.log(searchQuery)
+    const timer = setTimeout(() => {
+      if (searchCache[searchQuery]) {
+        setSearchQuery(searchCache[searchQuery]);
+        console.log("From cache")
+      } else {
+        getSuggestonData();
+      }
+    }, 200);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchQuery]);
 
   return (
     <div className="grid  grid-flow-col p-2 m-2 shadow-sm">
@@ -26,12 +59,31 @@ const Header = () => {
         ></img>
       </div>
       <div className="col-span-10 items-center text-center ">
-        <input
-          className="p-2 w-1/2 rounded-l-full border-2  "
-          type="text"
-          placeholder="Search"
-        />
-        <button className="p-2  bg-gray-600 rounded-r-full">Search</button>
+        <div>
+          <input
+            className="px-7 py-2 w-1/2 rounded-l-full border-2  "
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onFocus={() => setShowSuggestions(true)}
+            onBlur={() => setShowSuggestions(false)}
+          />
+          <button className="p-2  bg-gray-600 rounded-r-full">Search</button>
+        </div>
+        {showSuggestions && (
+          <div className="absolute bg-white ml-[345px] px-2 py-2 w-[37rem] shadow-lg rounded-md border border-gray-100">
+            <ul className="">
+              {suggestios.map((s) => (
+                <li
+                  key={s}
+                  className="text-start px-3 py-2 shadow-sm hover:bg-gray-100"
+                >
+                  🔍 {s}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
       <div className="col-span-1 -mr-14]">
         <img

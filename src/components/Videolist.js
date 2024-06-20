@@ -16,7 +16,7 @@ const Videolist = () => {
     getYoutubeData();
   }, []);
 
-  return Object.keys(videos).length == 0 ? null : (
+  return Object.keys(videos).length === 0 ? null : (
     <div  className="flex flex-wrap px-12 justify-start">
       {videos.map((items) => (
         <Link to={"/watch?v="+items.id} key={items.id}><VideoCard  info={items} /></Link>
