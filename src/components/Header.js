@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleMenu } from "../utils/appSlice";
 import { YT_SEARCH_API } from "../utils/constants";
 import { cacheResults } from "../utils/searchSlice";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [suggestios, setSugggestions] = useState([]);
+  const [suggestios, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const searchCache = useSelector((store) => store.search);
   // console.log(searchQuery);
@@ -18,7 +19,7 @@ const Header = () => {
   const getSuggestonData = async () => {
     const data = await fetch(YT_SEARCH_API + searchQuery);
     const json = await data.json();
-    setSugggestions(json[1]);
+    setSuggestions(json[1]);
     console.log("Api Call");
     dispatch(
       cacheResults({
@@ -30,8 +31,8 @@ const Header = () => {
     // console.log(searchQuery)
     const timer = setTimeout(() => {
       if (searchCache[searchQuery]) {
-        setSearchQuery(searchCache[searchQuery]);
-        console.log("From cache")
+        // setSearchQuery(searchCache[searchQuery]);
+        console.log("From cache");
       } else {
         getSuggestonData();
       }
@@ -66,20 +67,26 @@ const Header = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setShowSuggestions(true)}
-            onBlur={() => setShowSuggestions(false)}
+            // onFocusCapture={() => setShowSuggestions(false)}
           />
           <button className="p-2  bg-gray-600 rounded-r-full">Search</button>
         </div>
         {showSuggestions && (
-          <div className="absolute bg-white ml-[345px] px-2 py-2 w-[37rem] shadow-lg rounded-md border border-gray-100">
+          <div className="absolute bg-white ml-[345px]  w-[37rem] shadow-lg rounded-md border border-gray-100">
             <ul className="">
               {suggestios.map((s) => (
-                <li
-                  key={s}
-                  className="text-start px-3 py-2 shadow-sm hover:bg-gray-100"
-                >
-                  🔍 {s}
-                </li>
+                <Link key={s} to={"/results?search=" + s}>
+                  <li
+                    className="text-start px-3 py-2 shadow-sm hover:bg-gray-100"
+                    key={s}
+                    onClick={() => {
+                      setSearchQuery(s);
+                      setShowSuggestions(false);
+                    }}
+                  >
+                    🔍 {s}
+                  </li>
+                </Link>
               ))}
             </ul>
           </div>
