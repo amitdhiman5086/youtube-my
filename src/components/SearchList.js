@@ -4,6 +4,7 @@ import { GOOGLE_API, YT_SEARCH_DATA_API } from "../utils/constants";
 import { Link, useSearchParams } from "react-router-dom";
 import VideoCard from "./VideoCard";
 import Shimmer from "./Shimmer";
+import ButtonList from "./ButtonList";
 
 const SearchList = () => {
   const [searchResult, setSearchResult] = useState([]);
@@ -25,12 +26,15 @@ const SearchList = () => {
   return searchResult.length == 0 ? (
     <Shimmer />
   ) : (
-    <div className="flex flex-wrap px-12 justify-start">
-      {searchResult.map((items) => (
-        <Link to={"/watch?v=" + items?.id?.videoId} key={items.id}>
-          <VideoCard info={items} />
-        </Link>
-      ))}
+    <div className="flex flex-col">
+      <ButtonList />
+      <div className="flex flex-wrap px-12 justify-start">
+        {searchResult.map((items) => (
+          <Link to={"/watch?v=" + items?.id?.videoId} key={items.id}>
+            <VideoCard info={items} />
+          </Link>
+        ))}
+      </div>
     </div>
   );
 };

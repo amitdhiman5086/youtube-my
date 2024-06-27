@@ -33,7 +33,7 @@ const LiveChat = () => {
         </div>
       </div>
       <form
-        className="w-full p-2 ml-2 border border-black"
+        className="w-full p-2 ml-2 border  flex justify-center border-black"
         onSubmit={(e) => {
           e.preventDefault();
           dispatch(
@@ -46,12 +46,12 @@ const LiveChat = () => {
         }}
       >
         <input
-          className="p-2 w-96"
+          className="p-2 border border-black w-96"
           value={liveMessage}
           type="text"
           onChange={(e) => setLiveMessage(e.target.value)}
         />
-        <button className="px-2 mx-2 bg-green-100">➡️</button>
+        <button className="px-3 py-1 mx-4 bg-green-500">Send</button>
       </form>
     </>
   );

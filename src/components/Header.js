@@ -69,7 +69,14 @@ const Header = () => {
             onFocus={() => setShowSuggestions(true)}
             // onFocusCapture={() => setShowSuggestions(false)}
           />
-          <button className="p-2  bg-gray-600 rounded-r-full">Search</button>
+          <button
+            className="p-2  bg-gray-600 rounded-r-full"
+            onClick={() => {
+              setShowSuggestions(false);
+            }}
+          >
+            <Link to={"/results?search=" + searchQuery}>Search</Link>
+          </button>
         </div>
         {showSuggestions && (
           <div className="absolute bg-white ml-[345px]  w-[37rem] shadow-lg rounded-md border border-gray-100">
