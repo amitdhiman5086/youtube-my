@@ -8,7 +8,7 @@ const VideoCard = ({ info }) => {
   //   console.log(snippet);
   //   console.log(statistics);
   const { channelTitle, title, thumbnails, publishTime } = snippet;
-  console.log(parseInt(publishTime));
+  // console.log(parseInt(publishTime));
   const display =
     isNaN(parseInt(publishTime))
     ?parseInt(viewCount / 100000) + " lakhs views"

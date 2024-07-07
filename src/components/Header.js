@@ -20,7 +20,7 @@ const Header = () => {
     const data = await fetch(YT_SEARCH_API + searchQuery);
     const json = await data.json();
     setSuggestions(json[1]);
-    console.log("Api Call");
+    // console.log("Api Call");
     dispatch(
       cacheResults({
         [searchQuery]: json[1],
@@ -32,7 +32,7 @@ const Header = () => {
     const timer = setTimeout(() => {
       if (searchCache[searchQuery]) {
         // setSearchQuery(searchCache[searchQuery]);
-        console.log("From cache");
+        // console.log("From cache");
       } else {
         getSuggestonData();
       }
